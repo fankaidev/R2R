@@ -262,6 +262,7 @@ class IngestionService(Service):
         *args: Any,
         **kwargs: Any,
     ):
+        print("ingest files")
         if metadatas and len(metadatas) != len(files):
             raise R2RException(
                 status_code=400,

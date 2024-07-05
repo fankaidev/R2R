@@ -48,4 +48,6 @@ class R2RApp:
     def serve(self, host: str = "0.0.0.0", port: int = 8000):
         import uvicorn
 
-        uvicorn.run(self.app, host=host, port=port)
+        print("real start")
+
+        uvicorn.run(self.app, host=host, port=port, reload=True)

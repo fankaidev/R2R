@@ -74,6 +74,7 @@ def cli(ctx, config_path, config_name, client_server_mode, base_url):
 @click.option("--port", default=8000, help="Port to run the server on")
 @click.pass_obj
 def serve(obj, host, port):
+    assert not obj
     """Start the R2R server."""
     obj.serve(host, port)
 
@@ -85,6 +86,7 @@ def serve(obj, host, port):
 @click.option("--all-sample-files", is_flag=True, help="Use all sample files?")
 @click.pass_obj
 def ingest(obj, file_paths, user_ids, no_media, all_sample_files):
+    print("begin ingest")
     """Ingest files into R2R."""
     file_paths = list(file_paths)
     if not file_paths:

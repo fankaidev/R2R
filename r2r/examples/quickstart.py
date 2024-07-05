@@ -590,6 +590,7 @@ class R2RQuickstart:
         print(response)
 
     def serve(self, host: str = "0.0.0.0", port: int = 8000):
+        print("begin serve")
         self.app.serve(host, port)
 
     def get_app(self):
