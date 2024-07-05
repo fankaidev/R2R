@@ -53,6 +53,8 @@ JSON = JsonParamType()
 @click.pass_context
 def cli(ctx, config_path, config_name, client_server_mode, base_url):
     """R2R CLI for all core operations."""
+    print("r2r cli starts!")
+
     if config_path and config_name != "default":
         raise click.UsageError(
             "Cannot specify both config_path and config_name"

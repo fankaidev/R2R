@@ -26,7 +26,7 @@ services:
       - .:/app
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/v1/health"]
-      interval: 10s
+      interval: 60s
       timeout: 5s
       retries: 5
     labels:
@@ -40,6 +40,19 @@ services:
       - "traefik.http.middlewares.r2r-headers.headers.customrequestheaders.Access-Control-Allow-Methods=GET,POST,OPTIONS"
       - "traefik.http.middlewares.r2r-headers.headers.customrequestheaders.Access-Control-Allow-Headers=DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
       - "traefik.http.middlewares.r2r-headers.headers.customresponseheaders.Access-Control-Expose-Headers=Content-Length,Content-Range"
+    command:
+      [
+        "poetry",
+        "run",
+        "uvicorn",
+        "r2r.examples.quickstart_entry:app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000",
+        "--reload",
+        "--",
+      ]
 
   r2r-dashboard:
     image: emrgntcmplxty/r2r-dashboard:latest

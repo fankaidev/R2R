@@ -36,6 +36,8 @@ class R2RQuickstart:
         None,
     ]
 
+    r2r: R2R
+
     def __init__(
         self,
         config_name: Optional[str] = None,
@@ -68,7 +70,7 @@ class R2RQuickstart:
                 f"Running in client-server mode with base_url: {self.base_url}"
             )
         else:
-            self.app = R2R(config=config)
+            self.r2r = R2R(config=config)
             logger.info("Running locally")
 
         root_path = os.path.dirname(os.path.abspath(__file__))
@@ -128,7 +130,7 @@ class R2RQuickstart:
                 documents_dicts, monitor=True
             )
         else:
-            response = self.app.ingest_documents(documents)
+            response = self.r2r.ingest_documents(documents)
 
         t1 = time.time()
         print(f"Time taken to ingest files: {t1-t0:.2f} seconds")
@@ -161,7 +163,7 @@ class R2RQuickstart:
                 documents_dicts, monitor=True
             )
         else:
-            response = self.app.update_documents(documents)
+            response = self.r2r.update_documents(documents)
 
         t1 = time.time()
         print(f"Time taken to update documents: {t1-t0:.2f} seconds")
@@ -218,7 +220,7 @@ class R2RQuickstart:
             )
         else:
             metadatas = [{} for _ in file_paths]
-            response = self.app.ingest_files(
+            response = self.r2r.ingest_files(
                 files=files,
                 metadatas=metadatas,
                 document_ids=ids,
@@ -263,7 +265,7 @@ class R2RQuickstart:
                 monitor=True,
             )
         else:
-            response = self.app.update_files(
+            response = self.r2r.update_files(
                 files=new_files,
                 document_ids=[
                     generate_id_from_label(old_file.split(os.path.sep)[-1])
@@ -302,7 +304,7 @@ class R2RQuickstart:
                 kg_agent_generation_config,
             )
         else:
-            results = self.app.search(
+            results = self.r2r.search(
                 query,
                 VectorSearchSettings(
                     use_vector_search=use_vector_search,
@@ -381,7 +383,7 @@ class R2RQuickstart:
                     f"\nTime taken to stream RAG response: {t1-t0:.2f} seconds"
                 )
         else:
-            response = self.app.rag(
+            response = self.r2r.rag(
                 query,
                 vector_search_settings=VectorSearchSettings(
                     use_vector_search=use_vector_search,
@@ -447,7 +449,7 @@ class R2RQuickstart:
                 completion=completion,
             )
         else:
-            response = self.app.evaluate(
+            response = self.r2r.evaluate(
                 query=query,
                 context=context,
                 completion=completion,
@@ -475,7 +477,7 @@ class R2RQuickstart:
         if hasattr(self, "client"):
             response = self.client.delete(keys, values)
         else:
-            response = self.app.delete(keys, values)
+            response = self.r2r.delete(keys, values)
         t1 = time.time()
         print(f"Time taken to delete: {t1-t0:.2f} seconds")
         print(response)
@@ -486,7 +488,7 @@ class R2RQuickstart:
             response = self.client.logs(log_type_filter)
         else:
             t0 = time.time()
-            response = self.app.logs(log_type_filter)
+            response = self.r2r.logs(log_type_filter)
         t1 = time.time()
         print(f"Time taken to get logs: {t1-t0:.2f} seconds")
         print(response)
@@ -502,7 +504,7 @@ class R2RQuickstart:
 
         else:
             t0 = time.time()
-            results = self.app.documents_overview(document_ids, user_ids)
+            results = self.r2r.documents_overview(document_ids, user_ids)
 
         if isinstance(results, dict) and "results" in results:
             results = results["results"]
@@ -522,7 +524,7 @@ class R2RQuickstart:
         if hasattr(self, "client"):
             results = self.client.document_chunks(doc_uuid)
         else:
-            results = self.app.document_chunks(doc_uuid)
+            results = self.r2r.document_chunks(doc_uuid)
             for chunk in results:
                 print(chunk)
 
@@ -541,7 +543,7 @@ class R2RQuickstart:
             response = self.client.app_settings()
         else:
             t0 = time.time()
-            response = self.app.app_settings()
+            response = self.r2r.app_settings()
         t1 = time.time()
         print(f"Time taken to get app data: {t1-t0:.2f} seconds")
         print(response)
@@ -555,7 +557,7 @@ class R2RQuickstart:
             response = self.client.users_overview(user_ids)
         else:
             t0 = time.time()
-            response = self.app.users_overview(user_ids)
+            response = self.r2r.users_overview(user_ids)
 
         if isinstance(response, dict) and "results" in response:
             response = response["results"]
@@ -581,7 +583,7 @@ class R2RQuickstart:
                 analysis_types=analysis_types.model_dump(),
             )
         else:
-            response = self.app.analytics(
+            response = self.r2r.analytics(
                 filter_criteria=filter_criteria, analysis_types=analysis_types
             )
 
@@ -590,11 +592,14 @@ class R2RQuickstart:
         print(response)
 
     def serve(self, host: str = "0.0.0.0", port: int = 8000):
-        print("begin serve")
-        self.app.serve(host, port)
+        print("Quickstart Serving R2R")
+        logger.info("Quickstart Serving R2R")
+        self.r2r.serve(host, port)
 
     def get_app(self):
-        return self.app.app.app
+        print("Getting FastAPI app")
+        logger.info("Getting FastAPI app")
+        return self.r2r.app.fastapi
 
 
 if __name__ == "__main__":

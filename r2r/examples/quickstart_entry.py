@@ -26,6 +26,7 @@ def r2r_app(
     base_url: Optional[str] = None,
     pipeline_type: PipelineType = PipelineType.QNA,
 ) -> FastAPI:
+    logger.info("Building R2R app")
     if pipeline_type != PipelineType.QNA:
         raise ValueError("Only QNA pipeline is supported in quickstart.")
     if config_path and config_option:
@@ -69,6 +70,8 @@ host = os.getenv("HOST", "0.0.0.0")
 port = int(os.getenv("PORT", "8000"))
 pipeline_type = os.getenv("PIPELINE_TYPE", "qna")
 
+print("Starting R2R Quickstart")
+logger.info("Starting R2R Quickstart")
 logger.info(f"Environment CONFIG_OPTION: {config_option}")
 logger.info(f"Environment CONFIG_PATH: {config_path}")
 logger.info(f"Environment CLIENT_SERVER_MODE: {client_server_mode}")

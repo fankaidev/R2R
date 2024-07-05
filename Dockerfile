@@ -25,4 +25,4 @@ RUN pip install --no-cache-dir gunicorn uvicorn
 EXPOSE 8000
 
 # Run the application using Poetry
-CMD ["poetry", "run", "uvicorn", "r2r.examples.quickstart_entry:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["poetry", "run", "uvicorn", "r2r.examples.quickstart_entry:app", "--host", "0.0.0.0", "--port", "8000", "--reload", "--"]
